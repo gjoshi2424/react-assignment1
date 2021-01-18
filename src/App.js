@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import Table from './Table'
 import Form from './Form';
@@ -22,8 +23,11 @@ class App extends Component {
   }
   
   removeCharacter = index => {
+
+    
     const { characters } = this.state
-  
+    const id = characters[index]["id"]
+    axios.delete('http://localhost:5000/users?id=' +id)
     this.setState({
       characters: characters.filter((character, i) => {
         return i !== index
@@ -33,8 +37,9 @@ class App extends Component {
   
   handleSubmit = character => {
     this.makePostCall(character).then( callResult => {
-       if (callResult === true) {
-          this.setState({ characters: [...this.state.characters, character] });
+       if (callResult.status === 201) {
+          character = callResult
+          this.setState({ characters: [...this.state.characters, callResult.data] });
        }
     });
   }
@@ -43,7 +48,8 @@ class App extends Component {
     return axios.post('http://localhost:5000/users', character)
      .then(function (response) {
        console.log(response);
-       return (response.status === 200);
+       return response;
+       //return (response.status === 201);
      })
      .catch(function (error) {
        console.log(error);
