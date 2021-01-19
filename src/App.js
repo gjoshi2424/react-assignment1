@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import Table from './Table'
 import Form from './Form';
@@ -38,7 +37,7 @@ class App extends Component {
   handleSubmit = character => {
     this.makePostCall(character).then( callResult => {
        if (callResult.status === 201) {
-          character = callResult
+          //character = callResult.data
           this.setState({ characters: [...this.state.characters, callResult.data] });
        }
     });
